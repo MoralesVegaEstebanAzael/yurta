@@ -44,7 +44,6 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements AlmacenFragment.OnFragmentInteractionListener {
-
     private RecyclerView rvNavHeader;
     private ObraAdapter obraAdapter;
     private ArrayList<Obra> obrasList;

@@ -6,4 +6,10 @@
     <color name="colorAppBar">#FFFFFF</color>
     <color name="colorSecond">#434345</color>
     <color name="colorBlanco">#FFFFFF</color>
+
+    <color name="colorIcon">#FEC107</color>
+    <color name="colorIcon2">#607D8B</color>
+    <color name="colorIcon3">#CFD8DD</color>
+    <color name="colorIcon4">#465A65</color>
+    <color name="colorIcon5">#2196F3</color>
 </resources>
