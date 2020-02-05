@@ -1,26 +1,25 @@
-package com.itoaxaca.yurta.ui.send;
+package com.itoaxaca.yurta.ui.pedidos;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import androidx.annotation.Nullable;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+
 import com.itoaxaca.yurta.R;
 
-public class SendFragment extends Fragment {
+public class PedidosFragment extends Fragment {
 
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_send, container, false);
-        final TextView textView = root.findViewById(R.id.text_send);
+        View root = inflater.inflate(R.layout.fragment_pedidos, container, false);
+        final TextView textView = root.findViewById(R.id.text_home);
         return root;
     }
 }

@@ -3,30 +3,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/nav_almacen">
 
     <fragment
-        android:id="@+id/nav_home"
-        android:name="com.itoaxaca.yurta.ui.home.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/nav_almacen"
+        android:name="com.itoaxaca.yurta.ui.almacen.AlmacenFragment"
+        android:label="@string/menu_almacen"
+        tools:layout="@layout/fragment_almacen" />
+    <fragment
+        android:id="@+id/nav_pedidos"
+        android:name="com.itoaxaca.yurta.ui.pedidos.PedidosFragment"
+        android:label="@string/menu_pedidos"
+        tools:layout="@layout/fragment_pedidos" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.itoaxaca.yurta.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_ayuda"
+        android:name="com.itoaxaca.yurta.ui.ayuda.AyudaFragment"
+        android:label="@string/menu_ayuda"
+        tools:layout="@layout/fragment_ayuda" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.itoaxaca.yurta.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
-
-    <fragment
-        android:id="@+id/nav_tools"
-        android:name="com.itoaxaca.yurta.ui.tools.ToolsFragment"
-        android:label="@string/menu_tools"
+        android:id="@+id/nav_about"
+        android:name="com.itoaxaca.yurta.ui.acercade.AboutFragment"
+        android:label="@string/menu_acerca_de"
         tools:layout="@layout/fragment_tools" />
 
     <fragment
