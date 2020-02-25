@@ -232,3 +232,11 @@ public class MainActivity extends AppCompatActivity
         return animator;
     }
 }
+
+/*
+* close sesion
+* Preferences.savePreferenceBoolean(HomeActivity.this,false,Preferences.PREFERENCE_ESTADO_SESION);
+                Intent intent = new Intent(HomeActivity.this,MainActivity.class);
+                startActivity(intent);
+                finish();
+* */

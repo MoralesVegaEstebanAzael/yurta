@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#FFD304</color>
-    <color name="colorPrimaryDark">#F0AE0D</color>
-    <color name="colorAccent">#ffd149</color>
+    <color name="colorPrimary">#FF9800</color>
+    <color name="colorPrimaryDark">#F17610</color>
+    <color name="colorAccent">#ffbd45</color>
     <color name="colorAppBar">#FFFFFF</color>
     <color name="colorSecond">#434345</color>
     <color name="colorBlanco">#FFFFFF</color>
@@ -12,4 +12,7 @@
     <color name="colorIcon3">#CFD8DD</color>
     <color name="colorIcon4">#465A65</color>
     <color name="colorIcon5">#2196F3</color>
+
+
+    <color name="colorWhite">#f4f4f4</color>
 </resources>

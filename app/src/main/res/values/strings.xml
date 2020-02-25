@@ -21,4 +21,9 @@
     <string name="menu_ajustes">Ajustes</string>
     <string name="menu_perfil">Usuario</string>
     <string name="menu_salir">Salir</string>
+
+    <string name="login_title">LOGIN</string>
+
+    <string name="url">http://10.0.0.8:8000/api/</string>
+    <string name="login"></string>
 </resources>
