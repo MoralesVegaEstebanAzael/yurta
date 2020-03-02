@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.itoaxaca.yurta">
+
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,7 +13,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".LoginActivity"  android:theme="@style/AppTheme.NoActionBar">
+        <activity
+            android:name=".ui.pedidos.ConfirmacionPedidoActivity"
+            android:label="Confirmación"
+            android:parentActivityName=".ui.pedidos.MaterialActivity"></activity>
+        <activity
+            android:name=".ui.pedidos.MaterialActivity"
+            android:label="Pedidos"
+            android:parentActivityName=".ui.pedidos.DetallePedidoActivity"></activity>
+        <activity
+            android:name=".ui.pedidos.DetallePedidoActivity"
+            android:label="Detalle pedido"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,8 +37,11 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDOoifiSc2LnrhQwCJLy7xuaYgEo3xAE5s" />
     </application>
 
 </manifest>

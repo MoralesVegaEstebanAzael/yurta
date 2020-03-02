@@ -1,6 +1,8 @@
-package com.itoaxaca.yurta;
+package com.itoaxaca.yurta.adapter;
 import com.itoaxaca.yurta.Interface.ApiService;
+
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
@@ -11,6 +13,7 @@ public class ApiAdapter {
         if(API_SERVICE==null){
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(baseUrl)
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(ScalarsConverterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
@@ -19,3 +22,4 @@ public class ApiAdapter {
         return API_SERVICE;
     }
 }
+//RxJava2CallAdapterFactor

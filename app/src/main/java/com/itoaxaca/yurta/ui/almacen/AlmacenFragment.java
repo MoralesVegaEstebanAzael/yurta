@@ -16,14 +16,22 @@ import com.google.android.material.tabs.TabLayout;
 import com.itoaxaca.yurta.Constantes;
 import com.itoaxaca.yurta.R;
 import com.itoaxaca.yurta.adapter.SeccionAdapter;
+import com.itoaxaca.yurta.response.Almacen;
+import com.itoaxaca.yurta.response.AlmacenResponse;
+
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AlmacenFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private View view;
     private AppBarLayout appBarLayout;
-     TabLayout tabLayout;
+    TabLayout tabLayout;
     private ViewPager viewPager;
-
+    private ArrayList<Almacen> almacenArrayList;
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
 
@@ -93,5 +101,28 @@ public class AlmacenFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+/*
+    private void getApi() {
+        Call<AlmacenResponse> almacenResponseCall = ApiAdapter
+                .getApiService()
+                .getAlmacen(Preferences.getPeferenceString(getContext(), Preferences.PREFERENCE_API_TOKEN),
+                        Preferences.getPeferenceString(getContext(),Preferences.PREFERENCE_OBRA_ID));
+        almacenResponseCall.enqueue(new AlmacenCallback());
+    }
+*/
+
+    class AlmacenCallback implements Callback<AlmacenResponse> {
+        @Override
+        public void onResponse(Call<AlmacenResponse> call, Response<AlmacenResponse> response) {
+            if(response.isSuccessful())
+                almacenArrayList = response.body().getAlmacenes();
+        }
+
+        @Override
+        public void onFailure(Call<AlmacenResponse> call, Throwable t) {
+
+        }
     }
 }

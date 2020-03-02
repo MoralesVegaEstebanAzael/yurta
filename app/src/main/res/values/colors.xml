@@ -1,18 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="main_background">#EEEEEE</color>
     <color name="colorPrimary">#FF9800</color>
     <color name="colorPrimaryDark">#F17610</color>
     <color name="colorAccent">#ffbd45</color>
     <color name="colorAppBar">#FFFFFF</color>
     <color name="colorSecond">#434345</color>
     <color name="colorBlanco">#FFFFFF</color>
-
+    <color name="colorItemSelected">#e2e2e2</color>
     <color name="colorIcon">#FEC107</color>
     <color name="colorIcon2">#607D8B</color>
     <color name="colorIcon3">#CFD8DD</color>
     <color name="colorIcon4">#465A65</color>
     <color name="colorIcon5">#2196F3</color>
-
-
+    <color name="colorCloudOf">#e0e0e0</color>
+    <color name="colorRedLight">#ff6e40</color>
+    <color name="material_blue">#030FFD</color>
+    <color name="material_green_500">#4CAF50</color>
+    <color name="material_green_700">#388E3C</color>
+    <color name="material_green_a200">#69F0AE</color>
+    <color name="material_red">#FA442C</color>
+    <color name="material_purple_a700">#8630FA</color>
+    <color name="colorBlue">#3DB7D6</color>
+    <color name="colorBlueDark">#15384E</color>
     <color name="colorWhite">#f4f4f4</color>
+    <color name="colorRed">#ED4B58</color>
+    <color name="color_cyan">#4CE9FB</color>
+    <color name="colorYellow">#FBB03B</color>
 </resources>

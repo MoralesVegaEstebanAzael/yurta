@@ -5,6 +5,10 @@
         android:title="@string/action_settings"
         android:orderInCategory="100"
         app:showAsAction="never" />
+    <item android:id="@+id/action_salir"
+        android:title="@string/action_settings"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
     <item
         android:id="@+id/action_shopping_cart"
         android:visible="true"

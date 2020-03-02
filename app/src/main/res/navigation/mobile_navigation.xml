@@ -3,7 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_almacen">
+    app:startDestination="@+id/nav_obra">
+
+    <fragment
+        android:id="@+id/nav_obra"
+        android:name="com.itoaxaca.yurta.ui.obra.ObraFragment"
+        android:label="@string/menu_obra"
+        tools:layout="@layout/fragment_obra" />
+
 
     <fragment
         android:id="@+id/nav_almacen"
@@ -35,8 +42,8 @@
         tools:layout="@layout/fragment_share" />
 
     <fragment
-        android:id="@+id/nav_send"
+        android:id="@+id/nav_salir"
         android:name="com.itoaxaca.yurta.ui.send.SendFragment"
-        android:label="@string/menu_send"
+        android:label="@string/menu_salir"
         tools:layout="@layout/fragment_send" />
 </navigation>

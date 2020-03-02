@@ -7,7 +7,11 @@ public class Usuario {
     private String telefono;
     private String puesto;
     private String api_token;
+    private String url_avatar;
 
+    public String getUrl_avatar() {
+        return url_avatar;
+    }
     public String getId() {
         return id;
     }
