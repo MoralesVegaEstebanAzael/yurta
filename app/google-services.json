@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1091299166428",
+    "firebase_url": "https://yurta-b4d1d.firebaseio.com",
+    "project_id": "yurta-b4d1d",
+    "storage_bucket": "yurta-b4d1d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1091299166428:android:8404d77bf37212c1350c19",
+        "android_client_info": {
+          "package_name": "com.itoaxaca.yurta"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1091299166428-de3rbk4s75pg8mko8sroqll0dmcb9d14.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.itoaxaca.yurta",
+            "certificate_hash": "e463da9efd058a38d868765a966388f4332d8073"
+          }
+        },
+        {
+          "client_id": "1091299166428-ci6ag6fft1sgihq4ie0qu2djq7lsadkv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwp8knKgc7GcHjvZORKA3G6bQvSCiSzgs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1091299166428-ci6ag6fft1sgihq4ie0qu2djq7lsadkv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

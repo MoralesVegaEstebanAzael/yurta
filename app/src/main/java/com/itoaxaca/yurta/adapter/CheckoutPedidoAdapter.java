@@ -1,6 +1,7 @@
 package com.itoaxaca.yurta.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,18 +43,20 @@ public class CheckoutPedidoAdapter extends RecyclerView.Adapter<CheckoutPedidoAd
 
         holder.tvDescripcion.setText(m.getDescripcion());
         holder.tvCantidad.setText(m.getCantidadSolicitada()+" "+m.getUnidad());
+        holder.tvMarca.setText(m.getMarca());
+        holder.tvCategoria.setText(m.getTipo()+"");
+
         Glide.with(context)
                 .load(m.getUrl_imagen())
                 .placeholder(R.drawable.ic_place_holder)
                 .error(R.drawable.ic_cloud_off_black_24dp)
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .into(holder.ivMaterial);
-
-        holder.ivMaterial.setOnClickListener(new View.OnClickListener() {
+        holder.ivActionDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //delete item
-                Toast.makeText(context,"delete",Toast.LENGTH_SHORT).show();
+                removeAt(position);
+                Log.i("ELIM"," eliminando");
             }
         });
     }
@@ -62,18 +65,28 @@ public class CheckoutPedidoAdapter extends RecyclerView.Adapter<CheckoutPedidoAd
     public int getItemCount() {
         return arrayList.size();
     }
-
     public  class ViewHolder extends RecyclerView.ViewHolder {
         private TextView tvDescripcion;
         private TextView tvCantidad;
         private ImageView ivMaterial;
         private ImageView ivActionDelete;
+        private TextView tvMarca;
+        private TextView tvCategoria;
         public ViewHolder(View itemView) {
             super(itemView);
             tvDescripcion = itemView.findViewById(R.id.tv_mat_descrip);
             tvCantidad = itemView.findViewById(R.id.tv_mat_cantidad);
             ivMaterial = itemView.findViewById(R.id.iv_material);
             ivActionDelete = itemView.findViewById(R.id.ic_delete);
+            tvMarca = itemView.findViewById(R.id.tv_mat_marca);
+            tvCategoria = itemView.findViewById(R.id.tv_mat_cat);
         }
+    }
+
+
+    public void removeAt(int position) {
+        arrayList.remove(position);
+        this.notifyItemRemoved(position);
+        this.notifyItemRangeChanged(position, arrayList.size());
     }
 }

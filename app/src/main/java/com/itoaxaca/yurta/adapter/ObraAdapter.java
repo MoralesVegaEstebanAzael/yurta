@@ -60,8 +60,12 @@ public class ObraAdapter extends RecyclerView.Adapter<ObraAdapter.ViewHolder>{
         holder.row.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //guardar id de obra activia
                 Preferences.savePreferenceString(context,
                        obra.getId(),Preferences.PREFERENCE_OBRA_ID);
+                Preferences.savePreferenceString(context,
+                        obra.getDescripcion(),Preferences.PREFERENCE_OBRA_NOMBRE);
+
                 Toast.makeText(context,"ID: " +obrasList.get(position).getId(),Toast.LENGTH_SHORT).show();
 
                 View rootView = ((Activity)context).getWindow().getDecorView().findViewById(android.R.id.content);

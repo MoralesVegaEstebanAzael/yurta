@@ -1,67 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/main_background"
     tools:context=".ui.pedidos.ConfirmacionPedidoActivity">
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/scroll_items"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:layout_margin="8dp"
-                android:text="Items"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_marginTop="15dp"
-                android:id="@+id/rvDetPedido"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-            <View
-                android:background="@color/main_background"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"/>
-           <androidx.cardview.widget.CardView
-               android:foreground="?android:attr/selectableItemBackground"
-               android:clickable="true"
-               android:layout_marginBottom="@dimen/card_margin_vertical_big_activity"
-               android:layout_marginEnd="@dimen/card_margin_horizontal_big_activity"
-               android:layout_marginStart="@dimen/card_margin_horizontal_big_activity"
-               android:layout_marginTop="@dimen/card_margin_vertical_big_activity"
-               app:cardCornerRadius="@dimen/card_recycler_corner_radius"
-               app:cardElevation="@dimen/card_recycler_elevation"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content">
-                <LinearLayout
-                    android:padding="15dp"
-                    android:showDividers="middle"
-                    android:divider="@drawable/empty_tall_divider_white"
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:text="Enviar a"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
-                    <TextView
-                        android:text="SAN SALVADOR	LA PALMA	GUADALUPE VICTORIA	BASICO	DOMICILIO CONOCIDO	"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-                </LinearLayout>
-           </androidx.cardview.widget.CardView>
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/progressPedido"
+        android:layout_height="50dp"
+        android:layout_width="70dp"
+        android:layout_gravity="center_horizontal |center_vertical"
+        android:indeterminate="true"
+        android:layout_centerInParent="true"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_marginTop="25dp"
+        android:max="500"
+        android:progress="0"
+        android:progressDrawable="@drawable/progress_style" />
     <LinearLayout
+        android:visibility="visible"
+        android:layout_gravity="bottom"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
         android:id="@+id/llAceptar"
         android:padding="10dp"
         android:background="@color/colorAccent"
@@ -93,4 +55,70 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"/>
     </LinearLayout>
-</RelativeLayout>
+    <androidx.core.widget.NestedScrollView
+    android:visibility="visible"
+    android:layout_marginBottom="47dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:layout_margin="8dp"
+            android:text="Materiales"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_marginTop="15dp"
+            android:id="@+id/rvDetPedido"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <View
+            android:background="@color/main_background"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"/>
+        <androidx.cardview.widget.CardView
+            android:foreground="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:layout_marginBottom="@dimen/card_margin_vertical_big_activity"
+            android:layout_marginEnd="@dimen/card_margin_horizontal_big_activity"
+            android:layout_marginStart="@dimen/card_margin_horizontal_big_activity"
+            android:layout_marginTop="@dimen/card_margin_vertical_big_activity"
+            app:cardCornerRadius="@dimen/card_recycler_corner_radius"
+            app:cardElevation="@dimen/card_recycler_elevation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:padding="15dp"
+                android:showDividers="middle"
+                android:divider="@drawable/empty_tall_divider_white"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:src="@drawable/ic_place_black_24dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"/>
+                    <TextView
+                        android:text="Enviar a:"
+                        android:textStyle="bold"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+                </LinearLayout>
+
+                <TextView
+                    android:text="SAN SALVADOR	LA PALMA	GUADALUPE VICTORIA	BASICO	DOMICILIO CONOCIDO	"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
+</FrameLayout>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_bg"
+    android:elevation="10dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_large"
+        android:layout_marginBottom="4dp"
+        android:paddingHorizontal="@dimen/margin_large"
+        android:text="Pedido"
+        android:textSize="22dp"
+        android:gravity="start"
+        android:textAppearance="@style/TextAppearance.Tasker.DialogTitle" />
+    <TextView
+        android:id="@+id/tvDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="@dimen/margin_normal"
+        android:paddingHorizontal="@dimen/margin_large"
+        android:text="El pedido se ha realizado con éxito"
+        android:textAppearance="@style/TextAppearance.Tasker.DialogContent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/btn_succes_ok"
+            style="@style/Widget.Tasker.RaisedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:layout_marginBottom="@dimen/margin_normal"
+            android:text="Ok" />
+
+    </LinearLayout>
+
+</LinearLayout>

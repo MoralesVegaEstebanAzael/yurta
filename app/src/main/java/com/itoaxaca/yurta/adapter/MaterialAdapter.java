@@ -228,7 +228,7 @@ public class MaterialAdapter  extends RecyclerView.Adapter<MaterialAdapter.ViewH
             tvDetalleDescripcion = itemView.findViewById(R.id.tvMaterialDescripcion);
             tvDetalleUnidad = itemView.findViewById(R.id.tvMaterialUnidad);
             tvDetalleMarca = itemView.findViewById(R.id.tvMatMarca);
-            tvDetalleCantidad = itemView.findViewById(R.id.tvMatCantidad);
+
             checkBox = itemView.findViewById(R.id.cbSelect);
             button = itemView.findViewById(R.id.btnCantidad);
             ivMaterial = itemView.findViewById(R.id.ivMaterial);

@@ -27,4 +27,12 @@
     <color name="colorRed">#ED4B58</color>
     <color name="color_cyan">#4CE9FB</color>
     <color name="colorYellow">#FBB03B</color>
+
+    <color name="color_informatio">#288AD6</color>
+    <color name="color_dander">#FA5E5B</color>
+    <color name="color_warning">#FFC83F</color>
+    <color name="color_succes">#00B576</color>
+    <color name="color_t">#00B576</color>
+
+    <color name="color_logo">#F0F0F0</color>
 </resources>

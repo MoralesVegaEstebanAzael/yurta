@@ -1,16 +1,22 @@
 package com.itoaxaca.yurta.ui.pedidos;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,16 +24,20 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Adapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.chip.Chip;
+import com.google.android.material.snackbar.Snackbar;
 import com.itoaxaca.yurta.R;
 import com.itoaxaca.yurta.adapter.ApiAdapter;
 import com.itoaxaca.yurta.adapter.InviteContactAdapter;
 import com.itoaxaca.yurta.adapter.MaterialAdapter;
+import com.itoaxaca.yurta.network.Network;
 import com.itoaxaca.yurta.pojos.Material;
 import com.itoaxaca.yurta.preferences.Preferences;
 import com.itoaxaca.yurta.response.Materiales;
@@ -50,16 +60,25 @@ public class MaterialActivity extends AppCompatActivity implements View.OnClickL
     private TextView tvcategories;
     private List<Material> listAllMaterials;
     private Chip chipPetreo,chipOrg,chipTodo,chipSint,chipMet;
-
+    private ProgressBar progressBar;
+    private NestedScrollView scrollView;
     public List<String> mEmailList = new ArrayList<>();
-
+    public static final int REQUEST_CODE =1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_material);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        init();
+
+        if(Network.isOnline(getApplicationContext())){
+            Log.i("RED"," red habilidata");
+            init();
+        }else{
+            Log.i("RED"," verifique su conexion a internet");
+            dialogDanger();
+
+        }
     }
 
     private void init(){
@@ -70,6 +89,8 @@ public class MaterialActivity extends AppCompatActivity implements View.OnClickL
         listSinteticos = new ArrayList<>();
         listOrganicos = new ArrayList<>();
         tvcategories = findViewById(R.id.tvcategories);
+        progressBar = findViewById(R.id.progress);
+        scrollView = findViewById(R.id.nestedS);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -197,7 +218,8 @@ public class MaterialActivity extends AppCompatActivity implements View.OnClickL
                     Log.i("LISTA","tam: "+m.getDescripcion());
 
                 }
-
+                progressBar.setVisibility(View.GONE);
+                scrollView.setVisibility(View.VISIBLE);
                 setAdapter();
                // materialAdapter.notifyDataSetChanged();
             }
@@ -217,20 +239,26 @@ public class MaterialActivity extends AppCompatActivity implements View.OnClickL
                 finish();
                 break;
             case R.id.action_confirmar:
+                View parentLayout = findViewById(R.id.fl_material);
+
                 Intent intent = new Intent(this, ConfirmacionPedidoActivity.class);
                 ArrayList<Material> list = new ArrayList<>();
                 pedidos(list);
-                intent.putExtra("LIST", list);
-                this.startActivity(intent);
+                if(!list.isEmpty()){
+                    intent.putExtra("LIST", list);
+                    this.startActivityForResult(intent, REQUEST_CODE);
+                }else{
+                    Snackbar.make(parentLayout, R.string.snackbar_materiales, Snackbar.LENGTH_LONG)
+                            .show();
+                }
                 break;
         }
         return true;
     }
     private void pedidos(ArrayList<Material> list){
         for(Material m:materialArrayList){
-            if(m.isSelected()){
+            if(m.isSelected() && m.getCantidadSolicitada()>0){
                 list.add(m);
-                Log.i("XCANT",m.getCantidadSolicitada()+"");
             }
         }
     }
@@ -255,6 +283,64 @@ public class MaterialActivity extends AppCompatActivity implements View.OnClickL
     private void mostrar(List<Material> l){
         for(Material m:l){
             Log.i("M--","m " +m.getTipo());
+        }
+    }
+
+
+
+
+
+
+    public AlertDialog.Builder buildDialog(Context c) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(c);
+        builder.setTitle("Sin conexión a Internet.");
+        builder.setMessage("No tienes conexión a Internet");
+
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                finish();
+            }
+        });
+
+        return builder;
+    }
+
+    public void dialogDanger() {
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(MaterialActivity.this);
+        View view1 = getLayoutInflater().inflate(R.layout.dialog_danger,null);
+        Button btnOk = view1.findViewById(R.id.btn_dialog_red_ok);
+        Button btnConfiguracion = view1.findViewById(R.id.btn_dialog_red_conf);
+        mBuilder.setView(view1);
+        AlertDialog dialog = mBuilder.create();
+        dialog.show();
+
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                finish();
+            }
+        });
+        btnConfiguracion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                finish();
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                this.finish();
+
+            }
         }
     }
 }

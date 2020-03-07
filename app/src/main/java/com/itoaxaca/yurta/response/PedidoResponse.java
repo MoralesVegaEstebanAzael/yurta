@@ -7,7 +7,6 @@ public class PedidoResponse {
     private String estado;
     private String obra;
 
-
     public String getId() {
         return id;
     }

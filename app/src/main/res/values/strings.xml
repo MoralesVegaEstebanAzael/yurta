@@ -27,9 +27,22 @@
 
     <string name="url">http://10.0.0.8:8000/api/</string>
     <string name="login"></string>
-
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+    <string name="fcm_message">FCM Message</string>
+    <string name="default_notification_channel_name" translatable="true">Weather</string>
+    <string name="msg_subscribed">Subscribed to weather topic</string>
+    <string name="msg_subscribe_failed">Failed to subscribe to weather topic</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_detalle_pedido">DetallePedidoActivity</string>
     <string name="subtitulo_categorias">Todas las categorias</string>
+    <string name="snackbar_materiales">No hay materiales seleccionados</string>
+    <string name="alert_red">Red</string>
+    <string name="alert_red_body">Sin acceso a internet</string>
+    <string name="alert_red_button">Configurar</string>
+    <string name="alert_ok">ok</string>
+    <string name="categoria_petreos">Pétreos</string>
+    <string name="categoria_metalicos">Metálicos</string>
+    <string name="categoria_organicos">Orgánicos</string>
+    <string name="categoria_sinteticos">Sintéticos</string>
 </resources>

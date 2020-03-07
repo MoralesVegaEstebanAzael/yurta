@@ -1,6 +1,7 @@
 package com.itoaxaca.yurta;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -9,9 +10,11 @@ import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.itoaxaca.yurta.adapter.ApiAdapter;
 import com.itoaxaca.yurta.dataBase.DataBaseHandler;
 import com.itoaxaca.yurta.pojos.DetallePedido;
@@ -55,6 +58,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private ArrayList<Almacen> almacenArrayList;
     private ArrayList<PedidoResponse> pedidoResponseArrayList;
     private ArrayList<DetPedidoResponse> detPedidoResponseArrayList;
+    private CardView cardView;
+    private ProgressBar progressBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +81,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         almacenArrayList=new ArrayList<>();
         pedidoResponseArrayList = new ArrayList<>();
         detPedidoResponseArrayList = new ArrayList<>();
+        progressBar = findViewById(R.id.progress_login);
+        cardView = findViewById(R.id.cv_form_login);
+
 
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
@@ -87,10 +96,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
     private void login(){
         try {
+            String fcm_token = FirebaseInstanceId.getInstance().getToken();
+
+            Log.i("FCMTOKEN: ....",fcm_token);
+
             String correo = email.getText().toString().trim();
             String contraseña = password.getText().toString().trim();
             Call<Usuario> userCall = ApiAdapter
-                    .getApiService().getLogin(correo,contraseña);
+                    .getApiService().getLogin(correo,contraseña,fcm_token);
             userCall.enqueue(new UserCallback());
         } catch (Exception e) {
             e.printStackTrace();
@@ -98,7 +111,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-
+    private void showProgress(){
+        progressBar.setVisibility(View.VISIBLE);
+        cardView.setVisibility(View.GONE);
+    }
+    private void hiddenProgress(){
+        progressBar.setVisibility(View.GONE);
+        cardView.setVisibility(View.VISIBLE);
+    }
     private void getDataFromApi(String api_token,String userId) {
         /**DEL USUARIOS ALMACENAR LOCALMENTE**/
         /**OBRAS-ALMACEN-PEDIDOS-DETALLES-TIPOSDEOBRA**/
@@ -108,7 +128,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Observable<PedidosResponse> observable4 = ApiAdapter.getApiService().getPedidos(api_token,userId);
         Observable<DetPedidosResponse> observable5 = ApiAdapter.getApiService().getDetPedidos(api_token,userId);
 
-        Observable<List<String >> result =
+      /*7  Observable<List<String >> result =
                 Observable.zip(
                         observable1.subscribeOn(Schedulers.io()),
                         observable2.subscribeOn(Schedulers.io()),
@@ -126,9 +146,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 list.add(tiposObraResponse.getTiposobra().get(0).getDescripcion());
                                 return list;
                             }
-                        });
+                        });*/
 
-       /* Observable<List<String>> result =
+        Observable<List<String>> result =
                 Observable.zip(
                         observable1.subscribeOn(Schedulers.io()),
                         observable2.subscribeOn(Schedulers.io()),
@@ -154,7 +174,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 list.add(tiposObraResponse.getTiposobra().get(0).getDescripcion());
                                 return list;
                             }
-                        });*/
+                        });
 
         result.observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new Observer<List<String>>() {
@@ -175,6 +195,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     @Override
                     public void onComplete() {
                         Log.i("OnCOMPLETE", "<<onComplete>>");
+
+
+
                         addToDB();
                         //mostrar();
                     }
@@ -185,6 +208,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.btnLogin:
+                showProgress();
                 login();
                 break;
             case R.id.RBSesion:
@@ -227,12 +251,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         usuario.getEmail(),Preferences.PREFERENCE_USER_EMAIL);
                 Preferences.savePreferenceString(LoginActivity.this,
                         imagen,Preferences.PREFERENCE_USER_IMG);
+                Preferences.savePreferenceString(LoginActivity.this,
+                        usuario.getFcm_token(),Preferences.PREFERENCE_USER_FCM_TOKEN);
+
 
                 //datos from API REST
+
+
                 getDataFromApi(usuario.getApi_token(),usuario.getId());
                 //apitest(usuario.getApi_token(),usuario.getId());
+
+                /*****/
+
+                /****/
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
+                hiddenProgress();
                 finish();
             }
             Log.i("RES",response.toString());
@@ -240,51 +274,80 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         @Override
         public void onFailure(Call<Usuario> call, Throwable t) {
             Log.i("ERROR",t.getLocalizedMessage());
+            hiddenProgress();
         }
     }
 
 
+
     private void addToDB(){
-        if(!obraArrayList.isEmpty()){
+        if(!obraArrayList.isEmpty()){ //actualzar obras
             DataBaseHandler.getInstance(getApplicationContext())
                     .insertObras(obraArrayList,
                             Preferences.getPeferenceString(getApplicationContext(),
                                     Preferences.PREFERENCE_USER_ID));
         }
-        if(!almacenArrayList.isEmpty()){
+        if(!almacenArrayList.isEmpty()){ //actualizar materiales de obra
             DataBaseHandler.getInstance(getApplicationContext())
                     .insertAlmacen(almacenArrayList);
         }
-        if(!pedidoResponseArrayList.isEmpty()){
+        if(!pedidoResponseArrayList.isEmpty()){ //actualizar pedidos
             DataBaseHandler.getInstance(getApplicationContext())
                     .insertPedidos(pedidoResponseArrayList);
         }
-        if(!tipoObraArrayList.isEmpty()){
+        if(!tipoObraArrayList.isEmpty()){ //tipos de obra
             DataBaseHandler.getInstance(getApplicationContext())
                     .insertTiposObra(tipoObraArrayList);
         }
 
-        /*
         if(!detPedidoResponseArrayList.isEmpty()){
             DataBaseHandler.getInstance(getApplicationContext())
-                    .insertDetallesPedido(detPedidoResponseArrayList);
-        }*/
+                    .upsertDetallePedido(detPedidoResponseArrayList);
+        }
     }
 
+
+    ArrayList<DetPedidoResponse> arrayListDetalles = new ArrayList<>();
+    private void getDetallesPedido(String api_token,String usuario){
+
+        Call<DetPedidosResponse> detPedidosResponse=
+                ApiAdapter.getApiService().getDetallesPedidos(api_token,usuario);
+
+        detPedidosResponse.enqueue(new Callback<DetPedidosResponse>() {
+            @Override
+            public void onResponse(Call<DetPedidosResponse> call, Response<DetPedidosResponse> response) {
+                if(response.isSuccessful()){
+                    Log.i("DETALLES", " " + response);
+                    arrayListDetalles = response.body().getDet_pedidos();
+
+
+                    Log.i("DETALLESS", " " + arrayListDetalles.size());
+                }else{
+                    Log.i("DETALLES", " " + response);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DetPedidosResponse> call, Throwable t) {
+                Log.i("ERRORDET", t.getMessage());
+            }
+        });
+    }
+
+
+
+
     private void mostrar(){
-        Log.i("OBRASZ",obraArrayList.size()+"");
         for(Obra o:obraArrayList){
             Log.i("OBRAS",o.getId()+"-"+o.getDescripcion());
         }
-        Log.i("ALMACENZ",almacenArrayList.size()+"");
         for(Almacen a:almacenArrayList){
             Log.i("ALMACEN",a.getMaterial_marca()+"-"+a.getId_obra());
         }
-        Log.i("TIPOZ",tipoObraArrayList.size()+"");
         for(TipoObra t:tipoObraArrayList){
             Log.i("TIPO",t.getId() + "-"+t.getDescripcion());
         }
-        Log.i("PEDIDOZ",pedidoResponseArrayList.size()+"");
+
         for(PedidoResponse p:pedidoResponseArrayList){
             Log.i("PEDIDO",p.getId()+"-"+p.getFecha_p());
         }

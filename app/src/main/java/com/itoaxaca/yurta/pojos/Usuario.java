@@ -8,7 +8,7 @@ public class Usuario {
     private String puesto;
     private String api_token;
     private String url_avatar;
-
+    private String fcm_token;
     public String getUrl_avatar() {
         return url_avatar;
     }
@@ -34,5 +34,9 @@ public class Usuario {
 
     public String getApi_token() {
         return api_token;
+    }
+
+    public String getFcm_token() {
+        return fcm_token;
     }
 }

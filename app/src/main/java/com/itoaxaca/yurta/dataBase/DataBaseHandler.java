@@ -12,6 +12,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.itoaxaca.yurta.pojos.DetallePedido;
+import com.itoaxaca.yurta.pojos.Material;
 import com.itoaxaca.yurta.response.Almacen;
 import com.itoaxaca.yurta.response.DetPedidoResponse;
 import com.itoaxaca.yurta.response.Obra;
@@ -245,7 +247,8 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     //obtener pedidos de obra
     public Cursor getPedidos(String obra){
         SQLiteDatabase db = getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT * FROM pedido WHERE TRIM(obra) = '"+obra.trim()+"'", null);
+        Cursor c = db.rawQuery("SELECT * FROM pedido WHERE TRIM(obra)" +
+                " = '"+obra.trim()+"'", null);
         return c;
     }
     //obtener detalles de pedido
@@ -255,6 +258,12 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         return c;
     }
 
+    public Cursor getAlmacen(String obra,String categoria){
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT * FROM materiales_obra WHERE TRIM(obra) " +
+                "= '"+obra.trim()+"' AND TRIM(tipo) = '"+categoria.trim()+"'", null);
+        return c;
+    }
 
 
     public void upsertAlmacen(String obra,String _id,String descripcion,String unidad,String tipo,
@@ -395,6 +404,85 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         else{
             db.update("pedido", values
                     , "id=?", new String[]{Integer.toString(id)});
+        }
+    }
+
+    public void insert_pedido(String _id,String fecha_p,String fecha_conf,String estado,String obra){
+        SQLiteDatabase db = getReadableDatabase();
+        //Log.i("ENTRA","ENTRA");
+        ContentValues values = new ContentValues();
+        values.put("id",_id);
+        values.put("fecha_p",fecha_p);
+        values.put("fecha_conf",fecha_conf);
+        values.put("estado",estado);
+        values.put("obra",obra);
+
+        db.insert("pedido", null, values);
+    }
+
+
+
+    public void insertDetallesP(ArrayList<Material> detallesLis,String pedido){
+        SQLiteDatabase db = getReadableDatabase();
+        for (Material d:detallesLis) {
+            insert_detalle_pedido(d.getCantidadSolicitada()+"",pedido,d.getId(),
+                    d.getDescripcion(),d.getUnidad(),d.getMarca(),d.getUrl_imagen(),db);
+        }
+    }
+    public void insert_detalle_pedido(String cantidad,String idpedido,String idmaterial,String descripcion
+            , String unidad,String marca,String url_imagen,SQLiteDatabase db){
+
+        ContentValues values = new ContentValues();
+        values.put("cantidad",cantidad);
+        values.put("id_pedido",idpedido);
+        values.put("id_material",idmaterial);
+        values.put("descripcion",descripcion);
+        values.put("unidad",unidad);
+        values.put("marca",marca);
+        values.put("url_imagen",url_imagen);
+        db.insert("detalle_pedido", null, values);
+    }
+
+
+    public void upsertDetallePedido(String cantidad,String idpedido,String idmaterial,String descripcion
+            , String unidad,String marca,String url_imagen,SQLiteDatabase db){
+
+        ContentValues values = new ContentValues();
+        values.put("cantidad",cantidad);
+        values.put("id_pedido",idpedido);
+        values.put("id_material",idmaterial);
+        values.put("descripcion",descripcion);
+        values.put("unidad",unidad);
+        values.put("marca",marca);
+        values.put("url_imagen",url_imagen);
+
+        int id = getIDdetallePedido(idpedido,idmaterial,cantidad,db);
+        Log.i("IDDETALLEPEDIDO","id"+id);
+        if(id==-1){
+            db.insert("detalle_pedido", null, values);
+        }else{
+           // db.update("detalle_pedido", values
+             //       , "id=?", new String[]{Integer.toString(id)});
+        }
+
+       // db.insert("detalle_pedido", null, values);
+    }
+
+    private int getIDdetallePedido(String id_pedido,String id_material,String cantidad,SQLiteDatabase db){
+        Cursor c = db.rawQuery("SELECT * FROM detalle_pedido " +
+                "WHERE TRIM(id_pedido) = '"+id_pedido.trim()+"' " +
+                "AND TRIM(id_material) = '"+id_material+"' AND TRIM(cantidad)= '"+cantidad+"'", null);
+        if (c.moveToFirst())
+            return c.getInt(c.getColumnIndex("id_pedido"));
+        return -1;
+    }
+
+
+    public void upsertDetallePedido(ArrayList<DetPedidoResponse> arrayList){
+        SQLiteDatabase db = getReadableDatabase();
+        for(DetPedidoResponse d:arrayList){
+                upsertDetallePedido(d.getCantidad(),d.getId_pedido(),d.getId_material(),d.getDescripcion(),
+                        d.getUnidad(),d.getMarca(),d.getUrl_imagen(),db);
         }
     }
 }

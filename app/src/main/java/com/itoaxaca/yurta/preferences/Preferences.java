@@ -13,7 +13,10 @@ public class Preferences {
     public static final String PREFERENCE_USER_NAME = "com.itoaxaca.yurta.user.name";
     public static final String PREFERENCE_USER_EMAIL = "com.itoaxaca.yurta.user.email";
     public static final String PREFERENCE_OBRA_ID = "com.itoaxaca.yurta.obra.id";
+    public static final String PREFERENCE_OBRA_NOMBRE = "com.itoaxaca.yurta.obra.nombre";
     public static final String PREFERENCE_USER_IMG = "com.itoaxaca.yurta.user.img";
+    public static final String PREFERENCE_USER_FCM_TOKEN="com.itoaxaca.yurta.user.fcm_token";
+
     public static void savePreferenceBoolean(Context context, boolean b, String key){
         SharedPreferences sharedPreferences =
                 context.getSharedPreferences(STRING_PREFERENCES,context.MODE_PRIVATE);

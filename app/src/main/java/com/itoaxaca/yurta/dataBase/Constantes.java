@@ -36,8 +36,9 @@ public class Constantes {
             "(obra String,id STRING PRIMARY KEY,descripcion STRING,unidad STRING,tipo STRING" +
             ",marca STRING,cantidad STRING,url_imagen STRING)";
 
+    //tabla de notificaciones
 
-
-
+    public static final String CREATE_TABLE_NOTIFICACIONES = "CREATE TABLE IF NOT EXISTS notificaciones" +
+            " (id STRING,notifiable_id STRING,titulo STRING,tipo STRING,mensaje STRING,obra STRING)";
 }
 

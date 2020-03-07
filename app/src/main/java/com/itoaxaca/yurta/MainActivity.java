@@ -30,9 +30,13 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.itoaxaca.yurta.Interface.ApiService;
+import com.itoaxaca.yurta.adapter.ApiAdapter;
 import com.itoaxaca.yurta.adapter.ObraAdapter;
 import com.itoaxaca.yurta.dataBase.DataBaseHandler;
 import com.itoaxaca.yurta.pojos.Obra;
+import com.itoaxaca.yurta.pojos.Usuario;
 import com.itoaxaca.yurta.preferences.Preferences;
 import com.itoaxaca.yurta.ui.almacen.AlmacenFragment;
 import com.itoaxaca.yurta.ui.obra.ObraFragment;
@@ -55,6 +59,10 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class MainActivity extends AppCompatActivity
         implements AlmacenFragment.OnFragmentInteractionListener {
     private RecyclerView rvNavHeader;
@@ -68,14 +76,17 @@ public class MainActivity extends AppCompatActivity
     private TextView tvNavHeaderObra,tvNavHeaderUsuario,tvNavHeaderEmail;
     private String userName;
     private String userEmail;
-    public static DataBaseHandler dataBaseHandler;
+    private String obraNombre;
     private ImageView imageViewPerfil;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        dataBaseHandler = new DataBaseHandler(this);
+        updateFcm_token();
+
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -110,7 +121,23 @@ public class MainActivity extends AppCompatActivity
         // AsyncTaskLoadDB asyncTaskLoadDB = new AsyncTaskLoadDB();
         //asyncTaskLoadDB.execute();
         init();
+
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.getMenu().findItem(R.id.nav_salir).setOnMenuItemClickListener(menuItem -> {
+            logout();
+            return true;
+        });
     }
+
+    private void logout() {
+        Preferences.savePreferenceBoolean(MainActivity.this,false,
+                Preferences.PREFERENCE_SESION);
+        Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     @SuppressWarnings("StatementWithEmptyBody")
 
 
@@ -122,6 +149,13 @@ public class MainActivity extends AppCompatActivity
         imageViewPerfil = header.findViewById(R.id.imageViewPerfil);
         userName= Preferences.getPeferenceString(this,Preferences.PREFERENCE_USER_NAME);
         userEmail =Preferences.getPeferenceString(this,Preferences.PREFERENCE_USER_EMAIL);
+        obraNombre=Preferences.getPeferenceString(this,Preferences.PREFERENCE_OBRA_NOMBRE);
+
+
+        if(obraNombre!=null){
+            tvNavHeaderObra.setText(obraNombre);
+        }
+
         tvNavHeaderUsuario.setText(userName);
         tvNavHeaderEmail.setText(userEmail);
         rvNavHeader = header.findViewById(R.id.rvNavHeader);
@@ -292,6 +326,33 @@ public class MainActivity extends AppCompatActivity
             Log.i("WHILE"," RECUPERA");
         }
     }
+
+    private void updateFcm_token(){
+        String fcm_token = FirebaseInstanceId.getInstance().getToken();
+        String api_token = Preferences
+                .getPeferenceString(getApplicationContext(),Preferences.PREFERENCE_API_TOKEN);
+        String id = Preferences
+                .getPeferenceString(getApplicationContext(),Preferences.PREFERENCE_USER_ID);
+        Call<Usuario> userCall = ApiAdapter
+                .getApiService().updateFCMtoken(api_token,id,fcm_token);
+
+        userCall.enqueue(new Callback<Usuario>() {
+            @Override
+            public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+                if(response.isSuccessful()){
+                    Log.i("FCM ",response.body().getFcm_token());
+                }else{
+                    Log.i("CASI",response.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Usuario> call, Throwable t) {
+                Log.i("FCMERROR",": "+t.getMessage());
+            }
+        });
+    }
+
 
 
 }
