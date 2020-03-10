@@ -274,10 +274,17 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Intent intent;
         switch (item.getItemId()){
             case R.id.action_notifications:
                 //Toast.makeText(this,"Notificaciones",Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), NotificacionesActivity.class);
+                intent = new Intent(getApplicationContext(), NotificacionesActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.action_qr:
+                Toast.makeText(this,"QR CODE",Toast.LENGTH_SHORT).show();
+
+                intent = new Intent(getApplicationContext(), QRScanActivity.class);
                 startActivity(intent);
                 break;
 

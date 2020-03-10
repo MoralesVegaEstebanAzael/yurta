@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ReporteEnviarActivity"></activity>
+        <activity android:name=".QRScanActivity"></activity>
+        <activity android:name=".ReporteEnviarActivity" />
         <activity
             android:name=".ReporteActivity"
             android:label="Reporte"
