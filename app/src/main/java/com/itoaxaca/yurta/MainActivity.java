@@ -283,11 +283,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.action_qr:
                 Toast.makeText(this,"QR CODE",Toast.LENGTH_SHORT).show();
-
                 intent = new Intent(getApplicationContext(), QRScanActivity.class);
                 startActivity(intent);
                 break;
-
         }
         return super.onOptionsItemSelected(item);
     }

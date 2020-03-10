@@ -82,7 +82,7 @@ public class ReporteActivity extends AppCompatActivity {
         super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
             case R.id.action_confirmar:
-                View parentLayout = findViewById(R.id.fl_material);
+                View parentLayout = findViewById(R.id.fl_reporte);
 
                 Intent intent = new Intent(this, ReporteEnviarActivity.class);
                 ArrayList<Almacen> list = new ArrayList<>();
@@ -91,7 +91,7 @@ public class ReporteActivity extends AppCompatActivity {
                     intent.putExtra("LISTALMACEN", list);
                     this.startActivityForResult(intent, REQUEST_CODE);
                 }else{
-                    Snackbar.make(parentLayout, R.string.snackbar_alamen, Snackbar.LENGTH_LONG)
+                    Snackbar.make(parentLayout, R.string.snackbar_materiales, Snackbar.LENGTH_LONG)
                             .show();
                 }
                 break;

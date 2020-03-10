@@ -38,7 +38,7 @@
     <string name="subtitulo_categorias">Todas las categorias</string>
     <string name="snackbar_materiales">No hay materiales seleccionados</string>
 
-    <string name="snackbar_alamen">Ningun material actualizado</string>
+    <string name="snackbar_almacen">Ningun material actualizado</string>
     <string name="alert_red">Red</string>
     <string name="alert_red_body">Sin acceso a internet</string>
     <string name="alert_red_button">Configurar</string>

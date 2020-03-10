@@ -1,6 +1,8 @@
 package com.itoaxaca.yurta.pojos;
 
-public class Almacen {
+import java.io.Serializable;
+
+public class Almacen implements Serializable {
     private String obra;
     private String id;
     private String descripcion;

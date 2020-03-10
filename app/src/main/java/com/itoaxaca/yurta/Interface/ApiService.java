@@ -80,6 +80,9 @@ public interface ApiService {
 
     @GET("materiales")
     Call<Materiales> getMateriales(@Query("api_token") String api_token);
+    @GET("almacen_obras")
+    Call<AlmacenResponse> getAlmacenObra(@Query("api_token") String api_token,@Query("id") String id);
+
 
     //observables GET
     @GET("almacen_obras")
@@ -124,6 +127,15 @@ public interface ApiService {
             @Field("obra") String obra,
             @Field("cantidad[]") List<String> cantidad,
             @Field("material[]") List<String> material);
+
+
+    @FormUrlEncoded
+    @POST("enviar_reporte")
+    Call<String> sendReport(
+            @Field("api_token") String api_token,
+            @Field("obra") String obra,
+            @Field("id_materiales[]") List<String> id_materiales,
+            @Field("cantidades[]") List<String> cantidades);
 
 }
 

@@ -28,7 +28,7 @@
         android:layout_gravity="bottom"
         android:foreground="?android:attr/selectableItemBackground"
         android:clickable="true"
-        android:id="@+id/llAceptar"
+        android:id="@+id/llEnviar"
         android:padding="10dp"
         android:background="@color/colorAccent"
         android:layout_alignParentBottom="true"

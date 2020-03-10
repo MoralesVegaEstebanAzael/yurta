@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/fl_reporte"
     android:background="@color/main_background"
     tools:context=".ReporteActivity">
     <androidx.recyclerview.widget.RecyclerView
