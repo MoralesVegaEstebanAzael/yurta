@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.itoaxaca.yurta">
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -13,14 +14,23 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".ReporteEnviarActivity"></activity>
+        <activity
+            android:name=".ReporteActivity"
+            android:label="Reporte"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".ui.NotificacionesActivity"
+            android:label="Notificaciones"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".ui.pedidos.ConfirmacionPedidoActivity"
             android:label="Confirmación"
-            android:parentActivityName=".ui.pedidos.MaterialActivity"></activity>
+            android:parentActivityName=".ui.pedidos.MaterialActivity" />
         <activity
             android:name=".ui.pedidos.MaterialActivity"
             android:label="Agregar Materiales"
-            android:parentActivityName=".ui.pedidos.DetallePedidoActivity"></activity>
+            android:parentActivityName=".ui.pedidos.DetallePedidoActivity" />
         <activity
             android:name=".ui.pedidos.DetallePedidoActivity"
             android:label="Detalle del pedido"

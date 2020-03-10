@@ -33,6 +33,6 @@
     <color name="color_warning">#FFC83F</color>
     <color name="color_succes">#00B576</color>
     <color name="color_t">#00B576</color>
-
+    <color name="negro_semitransparente">#4D000000</color>
     <color name="color_logo">#F0F0F0</color>
 </resources>

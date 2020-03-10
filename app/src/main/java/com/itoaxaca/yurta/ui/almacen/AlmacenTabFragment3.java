@@ -2,6 +2,8 @@ package com.itoaxaca.yurta.ui.almacen;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,110 +15,77 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.itoaxaca.yurta.R;
+import com.itoaxaca.yurta.adapter.AlmacenAdapter;
+import com.itoaxaca.yurta.dataBase.DataBaseHandler;
+import com.itoaxaca.yurta.pojos.Almacen;
+import com.itoaxaca.yurta.preferences.Preferences;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AlmacenTabFragment3 extends Fragment {
-    private static final String TAG = "MainActivity";
-    private Button button;
+    private RecyclerView recyclerView;
+    private AlmacenAdapter almacenAdapter;
+    private List<Almacen> almacenList;
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
         
         View root = inflater.inflate(R.layout.fragment_almacen_3, container, false);
-        button = root.findViewById(R.id.btn_token);
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.i("FIRETOKEN","ID TOKEN "+ FirebaseInstanceId.getInstance().getToken());
-            }
-        });
+        almacenList = new ArrayList<>();
+        recyclerView = root.findViewById(R.id.rvAlmacen3);
 
-        ///init(root);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
+        almacenAdapter = new AlmacenAdapter(getContext(),almacenList);
+        recyclerView.setAdapter(almacenAdapter);
+
+
+        AsyntaskLoadDB asyntaskLoadDB = new AsyntaskLoadDB();
+        asyntaskLoadDB.execute();
+
+
         return root;
     }
 
+    private class AsyntaskLoadDB extends AsyncTask<Void,Integer,Boolean> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
 
-    private void init(View root){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            // Create channel to show notifications.
-            String channelId  = getString(R.string.default_notification_channel_id);
-            String channelName = getString(R.string.default_notification_channel_name);
-            NotificationManager notificationManager =
-                    getActivity().getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(new NotificationChannel(channelId,
-                    channelName, NotificationManager.IMPORTANCE_LOW));
         }
 
-        // If a notification message is tapped, any data accompanying the notification
-        // message is available in the intent extras. In this sample the launcher
-        // intent is fired when the notification is tapped, so any accompanying data would
-        // be handled here. If you want a different intent fired, set the click_action
-        // field of the notification message to the desired intent. The launcher intent
-        // is used when no click_action is specified.
-        //
-        // Handle possible data accompanying notification message.
-        // [START handle_data_extras]
-        if (getActivity().getIntent().getExtras() != null) {
-            for (String key : getActivity().getIntent().getExtras().keySet()) {
-                Object value = getActivity().getIntent().getExtras().get(key);
-                Log.d(TAG, "Key: " + key + " Value: " + value);
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            String obra = Preferences.getPeferenceString(getContext(), Preferences.PREFERENCE_OBRA_ID);
+            String categoria = "Orgánicos";
+            Cursor c = DataBaseHandler.getInstance(getContext()).getAlmacen(obra, categoria);
+            while (c.moveToNext()) {
+                Almacen a = new Almacen(c.getString(0), c.getString(1)
+                        , c.getString(2), c.getString(3), c.getString(4),
+                        c.getString(5), c.getString(6), c.getString(7));
+                almacenList.add(a);
             }
+            return null;
         }
-        // [END handle_data_extras]
 
-        Button subscribeButton = root.findViewById(R.id.btn_token);
-        subscribeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "Subscribing to weather topic");
-                // [START subscribe_topics]
-                FirebaseMessaging.getInstance().subscribeToTopic("weather")
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                String msg = getString(R.string.msg_subscribed);
-                                if (!task.isSuccessful()) {
-                                    msg = getString(R.string.msg_subscribe_failed);
-                                }
-                                Log.d(TAG, msg);
-                                Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                // [END subscribe_topics]
-            }
-        });
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
 
-       /* Button logTokenButton = findViewById(R.id.logTokenButton);
-        logTokenButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Get token
-                // [START retrieve_current_token]
-                FirebaseInstanceId.getInstance().getInstanceId()
-                        .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                                if (!task.isSuccessful()) {
-                                    Log.w(TAG, "getInstanceId failed", task.getException());
-                                    return;
-                                }
+            almacenAdapter.notifyDataSetChanged();
+        }
 
-                                // Get new Instance ID token
-                                String token = task.getResult().getToken();
-
-                                // Log and toast
-                                String msg = getString(R.string.msg_token_fmt, token);
-                                Log.d(TAG, msg);
-                                Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                // [END retrieve_current_token]
-            }
-        });*/
+        @Override
+        protected void onCancelled() {
+        }
     }
 }

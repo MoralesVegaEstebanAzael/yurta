@@ -5,12 +5,8 @@
         android:title="@string/action_settings"
         android:orderInCategory="100"
         app:showAsAction="never" />
-    <item android:id="@+id/action_salir"
-        android:title="@string/action_settings"
-        android:orderInCategory="100"
-        app:showAsAction="never" />
     <item
-        android:id="@+id/action_shopping_cart"
+        android:id="@+id/action_notifications"
         android:visible="true"
         android:title="Notificaiones"
         app:actionLayout="@layout/action_item_notificaciones"

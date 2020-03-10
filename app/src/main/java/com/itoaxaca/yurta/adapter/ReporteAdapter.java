@@ -22,32 +22,34 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.itoaxaca.yurta.R;
+import com.itoaxaca.yurta.pojos.Almacen;
 import com.itoaxaca.yurta.pojos.Material;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class InviteContactAdapter extends
-        RecyclerView.Adapter<InviteContactAdapter.ItemViewHolder> implements Filterable {
-    private List<Material> mContactList = new ArrayList<>();
-    private List<Material> mContectFilter = new ArrayList<>();
+public class ReporteAdapter extends
+        RecyclerView.Adapter<ReporteAdapter.ItemViewHolder> implements Filterable {
+    private List<Almacen> almacenList = new ArrayList<>();
+    private List<Almacen> almacenFilter = new ArrayList<>();
     private Context mContext;
     private CustomFilter mFilter;
-    public List<String> mEmailList = new ArrayList<>();
     public static  String categoria="";
     public static boolean all;
 
-    public InviteContactAdapter(Context mContext, List<Material> mContactList) {
+
+
+    public ReporteAdapter(Context mContext, List<Almacen> almacenList) {
         mContext = mContext;
-        this.mContactList = mContactList;
-        this.mContectFilter = mContactList;
+        this.almacenList = almacenList;
+        this.almacenFilter = almacenList;
         mFilter = new CustomFilter();
     }
 
     public onItemClickListener onItemClickListener;
 
-    public void setOnItemClickListener(InviteContactAdapter.onItemClickListener onItemClickListener) {
+    public void setOnItemClickListener(ReporteAdapter.onItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 
@@ -57,7 +59,7 @@ public class InviteContactAdapter extends
     public ItemViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = LayoutInflater
                 .from(viewGroup.getContext())
-                .inflate(R.layout.view_material, viewGroup, false);
+                .inflate(R.layout.view_reporte, viewGroup, false);
         return new ItemViewHolder(view);
     }
 
@@ -72,37 +74,21 @@ public class InviteContactAdapter extends
 
     @Override
     public void onBindViewHolder(final ItemViewHolder itemViewHolder, int i) {
-        final Material material = mContectFilter.get(i);
-        itemViewHolder.tvDetalleDescripcion.setText(material.getDescripcion());
-        itemViewHolder.tvDetalleUnidad.setText(material.getUnidad());
-        itemViewHolder.tvDetalleMarca.setText(material.getMarca());
+        final Almacen almacen = almacenFilter.get(i);
+        itemViewHolder.tvDetalleDescripcion.setText(almacen.getDescripcion());
+        itemViewHolder.tvDetalleUnidad.setText(almacen.getUnidad());
+        itemViewHolder.tvDetalleExis.setText(almacen.getCantidad());
 
-        if (material.isSelected())
-            itemViewHolder.checkBox.setButtonDrawable(R.drawable.ic_check_box_black_24dp);
-        else
-            itemViewHolder.checkBox.setButtonDrawable(R.drawable.ic_check_box_outline_blank_black_24dp);
 
-        if(material.getCantidadSolicitada()!=0)
-            itemViewHolder.button.setText(material.getCantidadSolicitada()+"");
+        if(almacen.getUtilizado()!=0)
+            itemViewHolder.button.setText(almacen.getUtilizado()+"");
         else
             itemViewHolder.button.setText("0");
 
 
-        itemViewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    itemViewHolder.checkBox.setButtonDrawable(R.drawable.ic_check_box_black_24dp);
-                }else{
-                    itemViewHolder.checkBox.setButtonDrawable(R.drawable.ic_check_box_outline_blank_black_24dp);
-                }
-                material.setSelected(isChecked);
-
-            }
-        });
 
         Glide.with(itemViewHolder.ivMaterial.getContext())
-                .load(material.getUrl_imagen())
+                .load(almacen.getUrl_imagen())
                 .placeholder(R.drawable.ic_place_holder)
                 .error(R.drawable.ic_cloud_off_black_24dp)
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
@@ -113,26 +99,28 @@ public class InviteContactAdapter extends
                 final int[] cantidad = {0};
                 //int m = Integer.parseInt("10");
                 NumberPicker numberPicker=  new NumberPicker(itemViewHolder.button.getContext());
-                numberPicker.setMaxValue(100);
+                numberPicker.setMaxValue(Integer.parseInt(almacen.getCantidad()));
                 numberPicker.setMinValue(0);
                 numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
                     @Override
                     public void onValueChange(NumberPicker numberPicker, int i, int i1) {
                         itemViewHolder.button.setText(i1+"");
-                        material.setCantidadSolicitada(i1);
+                        almacen.setUtilizado(i1);
                         cantidad[0] = i1;
-                        Log.i("CANTIDAD",material.getCantidadSolicitada()+"");
+                        Log.i("CANTIDAD",almacen.getUtilizado()+"");
 
                     }
                 });
-                AlertDialog.Builder builder = new AlertDialog.Builder(itemViewHolder.button.getContext()).setView(numberPicker);
-                builder.setTitle("Unidades")
+                AlertDialog.Builder builder = new AlertDialog.Builder(itemViewHolder
+                        .button.getContext()).setView(
+                                numberPicker);
+                builder.setTitle("Unidades Utilizadas")
                         .setIcon(R.drawable.ic_assignment_black_24dp);
                 builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Log.i("PICKER",""+i);
-                       // material.setCantidadSolicitada(cantidad[0]);
+                        // material.setCantidadSolicitada(cantidad[0]);
                     }
                 });
                 builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -152,39 +140,26 @@ public class InviteContactAdapter extends
 
     @Override
     public int getItemCount() {
-        return mContectFilter.size();
+        return almacenFilter.size();
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
         private TextView tvDetalleDescripcion;
         private TextView tvDetalleUnidad;
-        private TextView tvDetalleMarca;
-        private TextView tvDetalleCantidad;
-        private CheckBox checkBox;
-        private View view;
+        private TextView tvDetalleExis;
         private Button button;
         private ImageView ivMaterial;
         public ItemViewHolder(View itemView) {
             super(itemView);
-            view = itemView;
-            tvDetalleDescripcion = itemView.findViewById(R.id.tvMaterialDescripcion);
-            tvDetalleUnidad = itemView.findViewById(R.id.tvMaterialUnidad);
-            tvDetalleMarca = itemView.findViewById(R.id.tvMatMarca);
-            checkBox = itemView.findViewById(R.id.cbSelect);
-            button = itemView.findViewById(R.id.btnCantidad);
-            ivMaterial = itemView.findViewById(R.id.ivMaterial);
+            tvDetalleDescripcion = itemView.findViewById(R.id.tv_report_descrip);
+            tvDetalleUnidad = itemView.findViewById(R.id.tv_report_unidad);
+            tvDetalleExis = itemView.findViewById(R.id.tv_report_exis);
+            button = itemView.findViewById(R.id.btn_reporte_gasto);
+            ivMaterial = itemView.findViewById(R.id.iv_report);
         }
     }
 
-    public List<String> getEmail() {
-        mEmailList.clear();
-        for (Material contact : mContectFilter) {
-            if (contact.isSelected()) {
-                mEmailList.add(contact.getDescripcion());
-            }
-        }
-        return mEmailList;
-    }
+
 
     /**
      * this class for filter data.
@@ -195,21 +170,21 @@ public class InviteContactAdapter extends
         protected FilterResults performFiltering(CharSequence charSequence) {
             FilterResults results = new FilterResults();
             if (charSequence != null && charSequence.length() > 0) {
-                ArrayList<Material> filters = new ArrayList<>();
+                ArrayList<Almacen> filters = new ArrayList<>();
                 charSequence = charSequence.toString().toUpperCase();
-                for (int i = 0; i < mContactList.size(); i++) {
+                for (int i = 0; i < almacenList.size(); i++) {
                     if(all){
-                        if (mContactList.get(i).getDescripcion().toUpperCase().contains(charSequence)
-                                || mContactList.get(i).getMarca().toUpperCase().contains(charSequence)) {
-                            Material m = mContactList.get(i);
+                        if (almacenList.get(i).getDescripcion().toUpperCase().contains(charSequence)
+                                || almacenList.get(i).getMarca().toUpperCase().contains(charSequence)) {
+                            Almacen m = almacenList.get(i);
                             filters.add(m);
 
                         }
                     }else{
-                        if ( (mContactList.get(i).getDescripcion().toUpperCase().contains(charSequence)
-                                || mContactList.get(i).getMarca().toUpperCase().contains(charSequence)) &&
-                            mContactList.get(i).getTipo().toUpperCase().contains(categoria.toUpperCase())) {
-                            Material m = mContactList.get(i);
+                        if ( (almacenList.get(i).getDescripcion().toUpperCase().contains(charSequence)
+                                || almacenList.get(i).getMarca().toUpperCase().contains(charSequence)) &&
+                                almacenList.get(i).getTipo().toUpperCase().contains(categoria.toUpperCase())) {
+                            Almacen m = almacenList.get(i);
                             filters.add(m);
                         }
                     }
@@ -218,15 +193,15 @@ public class InviteContactAdapter extends
                 results.values = filters;
 
             } else {
-                results.count = mContactList.size();
-                results.values = mContactList;
+                results.count = almacenList.size();
+                results.values = almacenList;
             }
             return results;
         }
 
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-            mContectFilter = (ArrayList<Material>) filterResults.values;
+            almacenFilter = (ArrayList<Almacen>) filterResults.values;
             notifyDataSetChanged();
         }
     }

@@ -1,6 +1,7 @@
 package com.itoaxaca.yurta.ui.almacen;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.Uri;
@@ -14,13 +15,16 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
 import com.itoaxaca.yurta.Constantes;
 import com.itoaxaca.yurta.R;
+import com.itoaxaca.yurta.ReporteActivity;
 import com.itoaxaca.yurta.adapter.SeccionAdapter;
 import com.itoaxaca.yurta.response.Almacen;
 import com.itoaxaca.yurta.response.AlmacenResponse;
+import com.itoaxaca.yurta.ui.pedidos.MaterialActivity;
 
 import java.util.ArrayList;
 
@@ -41,6 +45,14 @@ public class AlmacenFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_almacen, container, false);
         View parent = container.getRootView();
         //View parent =(View)container.getParent();
+
+        FloatingActionButton fab1 = (FloatingActionButton) root.findViewById(R.id.fab_reporte);
+        fab1.setOnClickListener(new View.OnClickListener() {
+            @Override  public void onClick(View view) {
+                Intent intent = new Intent(getContext(), ReporteActivity.class);
+                getContext().startActivity(intent);
+            }});
+
         if(Constantes.rotation==0){
             if(appBarLayout==null){
                 appBarLayout = (AppBarLayout)parent.findViewById(R.id.appBarLayout);
@@ -87,7 +99,7 @@ public class AlmacenFragment extends Fragment {
         adapter.addFragment(new AlmacenTabFragment1(),"");
         adapter.addFragment(new AlmacenTabFragment2(),"");
         adapter.addFragment(new AlmacenTabFragment3(),"");
-        adapter.addFragment(new AlmacenTabFragment3(),"");
+        adapter.addFragment(new AlmacenTabFragment4(),"");
         viewPager.setAdapter(adapter);
     }
     // TODO: Rename method, update argument and hook method into UI event

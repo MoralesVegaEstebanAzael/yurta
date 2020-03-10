@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 
 import com.itoaxaca.yurta.pojos.DetallePedido;
 import com.itoaxaca.yurta.pojos.Material;
+import com.itoaxaca.yurta.pojos.Notificacion;
 import com.itoaxaca.yurta.response.Almacen;
 import com.itoaxaca.yurta.response.DetPedidoResponse;
 import com.itoaxaca.yurta.response.Obra;
@@ -57,14 +58,14 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(Constantes.CREATE_TABLE_PEDIDO);
         sqLiteDatabase.execSQL(Constantes.CREATE_TABLE_DET_PEDIDO);
         sqLiteDatabase.execSQL(Constantes.CREATE_TABLE_ALMACEN_OBRA);
+        sqLiteDatabase.execSQL(Constantes.CREATE_TABLE_NOTIFICACIONES);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS favoritos");
+        //sqLiteDatabase.execSQL("DROP TABLE IF EXISTS favoritos");
         onCreate(sqLiteDatabase);
     }
-
 
     //consultas
     public void insertUser(String id,String name,String email,String telefono,
@@ -262,6 +263,15 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
         Cursor c = db.rawQuery("SELECT * FROM materiales_obra WHERE TRIM(obra) " +
                 "= '"+obra.trim()+"' AND TRIM(tipo) = '"+categoria.trim()+"'", null);
+        return c;
+    }
+
+
+
+    public Cursor getAllAlmacen(String obra){
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT * FROM materiales_obra WHERE TRIM(obra)" +
+                " = '"+obra.trim()+"'", null);
         return c;
     }
 
@@ -484,6 +494,52 @@ public class DataBaseHandler extends SQLiteOpenHelper {
                 upsertDetallePedido(d.getCantidad(),d.getId_pedido(),d.getId_material(),d.getDescripcion(),
                         d.getUnidad(),d.getMarca(),d.getUrl_imagen(),db);
         }
+    }
+
+
+    public void upsertNotificacion(String _id,String notifiable_id,String titulo,String tipo
+            , String mensaje,String obra,SQLiteDatabase db){
+
+        ContentValues values = new ContentValues();
+        values.put("id",_id);
+        values.put("notifiable_id",notifiable_id);
+        values.put("titulo",titulo);
+        values.put("tipo",tipo);
+        values.put("mensaje",mensaje);
+        values.put("obra",obra);
+
+        int id = getNotificacion(_id,db);
+        Log.i("IDNOTIFY","id"+id);
+        if(id==-1){
+            db.insert("notificaciones", null, values);
+        }else{
+             db.update("notificaciones", values
+                   , "id=?", new String[]{Integer.toString(id)});
+        }
+    }
+
+
+    private int getNotificacion(String id,SQLiteDatabase db){
+        Cursor c = db.rawQuery("SELECT * FROM notificaciones " +
+                "WHERE TRIM(id) = '"+id.trim()+"'", null);
+        if (c.moveToFirst())
+            return c.getInt(c.getColumnIndex("id"));
+        return -1;
+    }
+
+    public void insertNotificaciones(ArrayList<Notificacion> notificacionArrayList){
+        SQLiteDatabase db = getReadableDatabase();
+        for (Notificacion n:notificacionArrayList){
+            upsertNotificacion(n.getId(),n.getNotifiable_id(),n.getTitulo(),
+                    n.getTipo(),n.getMensaje(),n.getObra(),db);
+        }
+    }
+
+    public Cursor getNotificaciones(String obra){
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT * FROM notificaciones" +
+                " WHERE TRIM(obra) = '"+obra.trim()+"'", null);
+        return c;
     }
 }
 

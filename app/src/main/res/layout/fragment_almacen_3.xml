@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@color/main_background"
     android:layout_height="match_parent" >
- 
-   <Button
-       android:id="@+id/btn_token"
-       android:text="Token"
+   <TextView
+       android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+       android:layout_margin="8dp"
+       android:text="Materiales orgánicos"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+   <androidx.recyclerview.widget.RecyclerView
+       android:id="@+id/rvAlmacen3"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"/>
+</LinearLayout>

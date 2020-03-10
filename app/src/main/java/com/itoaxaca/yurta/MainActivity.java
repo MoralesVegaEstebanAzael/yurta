@@ -21,8 +21,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.view.menu.MenuView;
 import androidx.core.view.GravityCompat;
+import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
@@ -38,6 +40,8 @@ import com.itoaxaca.yurta.dataBase.DataBaseHandler;
 import com.itoaxaca.yurta.pojos.Obra;
 import com.itoaxaca.yurta.pojos.Usuario;
 import com.itoaxaca.yurta.preferences.Preferences;
+import com.itoaxaca.yurta.response.CountNotificaciones;
+import com.itoaxaca.yurta.ui.NotificacionesActivity;
 import com.itoaxaca.yurta.ui.almacen.AlmacenFragment;
 import com.itoaxaca.yurta.ui.obra.ObraFragment;
 
@@ -78,8 +82,9 @@ public class MainActivity extends AppCompatActivity
     private String userEmail;
     private String obraNombre;
     private ImageView imageViewPerfil;
-
-
+    private TextView textNotifItemCount;
+    String api_token;
+    String id_usuario;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,6 +147,11 @@ public class MainActivity extends AppCompatActivity
 
 
     private void init(){
+        api_token = Preferences
+                .getPeferenceString(getApplicationContext(),Preferences.PREFERENCE_API_TOKEN);
+        id_usuario = Preferences
+                .getPeferenceString(getApplicationContext(),Preferences.PREFERENCE_USER_ID);
+
         obrasList = new ArrayList<>();
         tvNavHeaderObra = header.findViewById(R.id.tvNavHeaderObra);
         tvNavHeaderUsuario = header.findViewById(R.id.tvNavHeaderUser);
@@ -216,7 +226,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+
 
         /*Preferences.savePreferenceBoolean(MainActivity.this
                 ,false,Preferences.PREFERENCE_SESION);
@@ -224,7 +234,55 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
                 finish();
             */
+        getMenuInflater().inflate(R.menu.main, menu);
+        //getMenuInflater().inflate(R.menu.toolbar_menu_paquete, menu);
+
+        final MenuItem menuItem = menu.findItem(R.id.action_notifications);
+        View actionView= MenuItemCompat.getActionView(menuItem);
+        textNotifItemCount = actionView.findViewById(R.id.notify_badge_red);
+        actionView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onOptionsItemSelected(menuItem);
+            }
+        });
+        //int count = dataBaseHandler.getCountShoppingCart();
+
+
+        Call<CountNotificaciones> notificacionesCall = ApiAdapter
+                .getApiService().getCountNotificaciones(api_token,id_usuario);
+        notificacionesCall.enqueue(new Callback<CountNotificaciones>() {
+            @Override
+            public void onResponse(Call<CountNotificaciones> call, Response<CountNotificaciones> response) {
+                if(response.isSuccessful()){
+                    Log.i("COUNT",response.body().getUnread());
+                    textNotifItemCount.setText(response.body().getUnread());
+
+                }
+                Log.i("RESPUESTA",response.toString());
+            }
+            @Override
+            public void onFailure(Call<CountNotificaciones> call, Throwable t) {
+                Log.i("ERROR: ",t.getMessage());
+            }
+        });
+
+
+
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_notifications:
+                //Toast.makeText(this,"Notificaciones",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), NotificacionesActivity.class);
+                startActivity(intent);
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -327,14 +385,24 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        countNotif();
+    }
+
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        countNotif();
+    }
     private void updateFcm_token(){
         String fcm_token = FirebaseInstanceId.getInstance().getToken();
-        String api_token = Preferences
-                .getPeferenceString(getApplicationContext(),Preferences.PREFERENCE_API_TOKEN);
-        String id = Preferences
-                .getPeferenceString(getApplicationContext(),Preferences.PREFERENCE_USER_ID);
         Call<Usuario> userCall = ApiAdapter
-                .getApiService().updateFCMtoken(api_token,id,fcm_token);
+                .getApiService().updateFCMtoken(api_token,id_usuario,fcm_token);
 
         userCall.enqueue(new Callback<Usuario>() {
             @Override
@@ -345,16 +413,34 @@ public class MainActivity extends AppCompatActivity
                     Log.i("CASI",response.toString());
                 }
             }
-
             @Override
             public void onFailure(Call<Usuario> call, Throwable t) {
                 Log.i("FCMERROR",": "+t.getMessage());
             }
         });
     }
-
-
-
+    private void countNotif(){
+        Call<CountNotificaciones> notificacionesCall = ApiAdapter
+                .getApiService().getCountNotificaciones(api_token,id_usuario);
+        notificacionesCall.enqueue(new Callback<CountNotificaciones>() {
+            @Override
+            public void onResponse(Call<CountNotificaciones> call,
+                                   Response<CountNotificaciones> response) {
+                if(response.isSuccessful()){
+                    Log.i("COUNT",response.body().getUnread());
+                    if(response.body().getUnread()==null)
+                        textNotifItemCount.setText("0");
+                    else
+                        textNotifItemCount.setText(response.body().getUnread()+"");
+                }
+                Log.i("RESPUESTA",response.toString());
+            }
+            @Override
+            public void onFailure(Call<CountNotificaciones> call, Throwable t) {
+                Log.i("ERROR: ",t.getMessage());
+            }
+        });
+    }
 }
 
 /*

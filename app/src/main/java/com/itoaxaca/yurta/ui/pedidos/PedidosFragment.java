@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.itoaxaca.yurta.R;
 import com.itoaxaca.yurta.adapter.PedidoAdapter;
 import com.itoaxaca.yurta.dataBase.DataBaseHandler;
@@ -27,7 +27,6 @@ import java.util.ArrayList;
 
 public class PedidosFragment extends Fragment {
     private RecyclerView rvPedidos;
-    private FloatingActionButton fabAdd;
     private PedidoAdapter adapterPedidos;
     private ArrayList<Pedido> pedidoArrayList;
     private CoordinatorLayout coordinatorLayout;
@@ -45,19 +44,22 @@ public class PedidosFragment extends Fragment {
     }
 
     private void init(){
-        fabAdd = root.findViewById(R.id.fab_add_pedido);
+
+
+        FloatingActionButton fab1 = (FloatingActionButton) root.findViewById(R.id.fab_add_pedido);
+        fab1.setOnClickListener(new View.OnClickListener() {
+            @Override  public void onClick(View view) {
+                Intent intent = new Intent(getContext(), MaterialActivity.class);
+                getContext().startActivity(intent);
+            }});
+
+
+
+
         rvPedidos = root.findViewById(R.id.rvPedidos);
         pedidoArrayList = new ArrayList<>();
         coordinatorLayout = root.findViewById(R.id.coordinatorLayout);
-        fabAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                  //      .setAction("Action", null).show();
-                Intent intent = new Intent(getContext(), MaterialActivity.class);
-                getContext().startActivity(intent);
-            }
-        });
+
 
         getPedidos();
         Log.i("SIZE"," "+pedidoArrayList.size());
@@ -93,4 +95,31 @@ public class PedidosFragment extends Fragment {
             pedidoArrayList.add(pedido);
         }
     }
+
+
+    /*@Override
+    public void onResume() {
+        super.onResume();
+        *//*getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK){
+
+
+                    return true;
+                }
+                return false;
+            }
+        });*//*
+
+
+        PedidosFragment fragment = (PedidosFragment)
+                getFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        getFragmentManager().beginTransaction()
+                .detach(fragment)
+                .attach(fragment)
+                .commit();
+    }*/
 }

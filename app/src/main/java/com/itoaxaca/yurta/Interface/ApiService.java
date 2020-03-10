@@ -74,7 +74,8 @@ public interface ApiService {
     @POST("notif_mark_as_read")
     @FormUrlEncoded
     Call<Usuario> markAsReadNotifications(@Field("api_token") String api_token,
-                                 @Field("id") String id);
+                                          @Field("id") String id,
+                                          @Field("ids_notif[]") List<String> ids_notif);
 
 
     @GET("materiales")

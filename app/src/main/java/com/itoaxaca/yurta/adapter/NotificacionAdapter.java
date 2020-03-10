@@ -19,22 +19,40 @@ import java.util.ArrayList;
 public class NotificacionAdapter extends RecyclerView.Adapter<NotificacionAdapter.ViewHolder>{
     private ArrayList<Notificacion> notificacionList;
     private Context context;
-
-    public NotificacionAdapter(Context context, ArrayList<Notificacion> notificacionList) {
+    private ArrayList<String> unreadList;
+    public NotificacionAdapter(Context context, ArrayList<Notificacion> notificacionList,
+                               ArrayList<String> unreadList) {
         this.context = context;
         this.notificacionList = notificacionList;
+        this.unreadList = unreadList;
     }
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.view_notificacion, parent, false);
+                .inflate(R.layout.view_notification, parent, false);
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.tvNombre.setText(notificacionList.get(position).getTitulo());
+        Notificacion n = notificacionList.get(position);
+        holder.tvTitulo.setText(n.getTitulo());
+        holder.tvMensaje.setText(n.getMensaje());
+        holder.tvObra.setText("Obra: "+n.getObra());
+        switch (n.getTipo()){
+            case "1":
+                holder.ivIcono.setImageResource(R.drawable.ic_caja);
+                break;
+            case "2":
+
+                break;
+        }
+
+        if(!unreadList.isEmpty()){
+            if(unreadList.contains(n.getId()))
+                holder.viewNew.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -43,15 +61,19 @@ public class NotificacionAdapter extends RecyclerView.Adapter<NotificacionAdapte
     }
 
     public  class ViewHolder extends RecyclerView.ViewHolder {
-        private ImageView ivNotificacion;
-        private TextView tvNombre;
-        private View view;
+        private TextView tvTitulo;
+        private TextView tvMensaje;
+        private TextView tvObra;
+        private ImageView ivIcono;
+        private View viewNew;
         public ViewHolder(View itemView) {
             super(itemView);
-            view = itemView;
-            ivNotificacion = itemView.findViewById(R.id.ivNotificacion);
-            tvNombre = itemView.findViewById(R.id.tvNotificationNombre);
-
+            tvTitulo = itemView.findViewById(R.id.tv_notificacion_titulo);
+            tvMensaje = itemView.findViewById(R.id.tv_notificacion_mensaje);
+            tvObra = itemView.findViewById(R.id.tv_notificacion_obra);
+            ivIcono = itemView.findViewById(R.id.iv_icono);
+            viewNew = itemView.findViewById(R.id.vnotif_nueva);
         }
     }
+
 }

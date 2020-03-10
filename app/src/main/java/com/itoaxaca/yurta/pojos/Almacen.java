@@ -9,6 +9,7 @@ public class Almacen {
     private String marca;
     private String cantidad;
     private String url_imagen;
+    private int utilizado;
 
     public Almacen(String obra, String id, String descripcion, String unidad, String tipo, String marca, String cantidad, String url_imagen) {
         this.obra = obra;
@@ -19,6 +20,15 @@ public class Almacen {
         this.marca = marca;
         this.cantidad = cantidad;
         this.url_imagen = url_imagen;
+        utilizado =0;
+    }
+
+    public int getUtilizado() {
+        return utilizado;
+    }
+
+    public void setUtilizado(int utilizado) {
+        this.utilizado = utilizado;
     }
 
     public String getObra() {

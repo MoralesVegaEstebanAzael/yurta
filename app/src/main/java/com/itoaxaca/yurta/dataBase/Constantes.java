@@ -38,7 +38,7 @@ public class Constantes {
 
     //tabla de notificaciones
 
-    public static final String CREATE_TABLE_NOTIFICACIONES = "CREATE TABLE IF NOT EXISTS notificaciones" +
-            " (id STRING,notifiable_id STRING,titulo STRING,tipo STRING,mensaje STRING,obra STRING)";
+    public static final String CREATE_TABLE_NOTIFICACIONES = "CREATE TABLE IF NOT EXISTS notificaciones " +
+            " ( id STRING,notifiable_id STRING,titulo STRING,tipo STRING,mensaje STRING,obra STRING)";
 }
 

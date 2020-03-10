@@ -13,6 +13,7 @@
 
 
     <fragment
+
         android:id="@+id/nav_almacen"
         android:name="com.itoaxaca.yurta.ui.almacen.AlmacenFragment"
         android:label="@string/menu_almacen"
