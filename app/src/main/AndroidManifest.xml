@@ -18,8 +18,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".QRScanActivity"></activity>
-        <activity android:name=".ReporteEnviarActivity" />
+        <activity android:name=".QRScanActivity"
+            android:label="QR Scan"
+            android:parentActivityName=".MainActivity"></activity>
+        <activity android:name=".ReporteEnviarActivity"
+            android:label="Confirmar Reporte"
+            android:parentActivityName=".ReporteActivity"/>
         <activity
             android:name=".ReporteActivity"
             android:label="Reporte"

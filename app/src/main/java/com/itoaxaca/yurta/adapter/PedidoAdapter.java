@@ -43,9 +43,25 @@ public class PedidoAdapter extends RecyclerView.Adapter<PedidoAdapter.ViewHolder
         holder.tvPedidoID.setText("#"+String.format("%03d",id));
         holder.tvPedidoFecha.setText(p.getFecha_p());
 
+        if(p.getEstado().equals("0")){
+            holder.tvEstado1.setText("En trámite");
+            holder.tvEstado2.setText("En trámite");
+            holder.view1.setVisibility(View.VISIBLE);
+        }
+        else if(p.getEstado().equals("1")){
+            holder.tvEstado1.setText("En camino");
+            holder.tvEstado2.setText("En camino");
+            holder.view1.setVisibility(View.VISIBLE);
+            holder.view2.setVisibility(View.VISIBLE);
+        }
+        else if(p.getEstado().equals("2")){
+            holder.tvEstado1.setText("Entregado");
+            holder.tvEstado2.setText("Entregado");
+            holder.view1.setVisibility(View.VISIBLE);
+            holder.view2.setVisibility(View.VISIBLE);
+            holder.view3.setVisibility(View.VISIBLE);
+        }
 
-        holder.tvEstado1.setText(p.getEstado());
-        holder.tvEstado1.setText(p.getEstado());
         holder.ivInfAcction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,10 +100,10 @@ public class PedidoAdapter extends RecyclerView.Adapter<PedidoAdapter.ViewHolder
         private LinearLayout llInf;
         private LinearLayout llMoreInf;
 
-        private View view;
+        private View view1,view2,view3;
         public ViewHolder(View itemView) {
             super(itemView);
-            view = itemView;
+
             tvPedidoID = itemView.findViewById(R.id.tvPedidoID);
             tvPedidoFecha = itemView.findViewById(R.id.tvPedidoFecha);
 
@@ -96,6 +112,11 @@ public class PedidoAdapter extends RecyclerView.Adapter<PedidoAdapter.ViewHolder
             ivInfAcction = itemView.findViewById(R.id.moreInfPedido);
             llInf = itemView.findViewById(R.id.layoutInfPedido);
             llMoreInf = itemView.findViewById(R.id.layoutDetalles);
+
+
+            view1= itemView.findViewById(R.id.view_progress1);
+            view2= itemView.findViewById(R.id.view_progress2);
+            view3= itemView.findViewById(R.id.view_progress3);
         }
     }
 }

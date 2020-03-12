@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.widget.Toast;
 
+
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import com.google.zxing.Result;
 
@@ -32,7 +33,7 @@ public class QRScanActivity extends AppCompatActivity implements ZXingScannerVie
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             if (checkPermission()){
-                Toast.makeText(QRScanActivity.this, "Persmisos condedidos", Toast.LENGTH_LONG).show();
+                Toast.makeText(QRScanActivity.this, "Permisos concedidos", Toast.LENGTH_LONG).show();
 
             }else {
                 requestPermision();

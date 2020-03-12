@@ -32,9 +32,9 @@
                     android:padding="5dp"
                     android:background="@drawable/circlebackgroundpcolor"
                     android:layout_weight=".01"
-                    android:src="@drawable/ic_pedidos_white"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"/>
+                    android:src="@drawable/ic_caja"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"/>
                 <LinearLayout
                     android:showDividers="middle"
                     android:divider="@drawable/empty_tall_divider_white"
@@ -102,6 +102,33 @@
                     android:text="Estado"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <View
+                        android:visibility="invisible"
+                        android:id="@+id/view_progress1"
+                        android:layout_weight="3"
+                        android:background="@color/colorAccent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="10dp"/>
+                    <View
+                        android:visibility="invisible"
+                        android:id="@+id/view_progress2"
+                        android:layout_weight="3"
+                        android:background="@color/colorPrimary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="10dp"/>
+                    <View
+                        android:visibility="invisible"
+                        android:id="@+id/view_progress3"
+                        android:layout_weight="3"
+                        android:background="@color/colorPrimaryDark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="10dp"/>
+                </LinearLayout>
+
                 <TextView
                     android:id="@+id/tvNumMat"
                     android:text="Número de materiales"
